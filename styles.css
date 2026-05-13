@@ -88,10 +88,16 @@ button {
   background: var(--field-bg);
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.74);
   outline: 0;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
 .search-row input:focus {
   border-color: var(--focus-ring);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.82),
+    0 0 0 5px rgba(247, 217, 120, 0.18),
+    0 8px 22px rgba(111, 174, 155, 0.18);
 }
 
 .search-row button,
@@ -120,10 +126,10 @@ button {
   justify-content: center;
   align-items: flex-end;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 5px;
   width: min(760px, 100%);
-  margin: -4px auto 22px;
-  padding: 0 18px 15px;
+  margin: -2px auto 24px;
+  padding: 10px 18px 18px;
 }
 
 .bookmark-shelf::after {
@@ -132,11 +138,15 @@ button {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 13px;
+  height: 16px;
   border: 2px solid rgba(104, 76, 47, 0.38);
-  border-radius: 999px;
-  background: linear-gradient(180deg, #c39a6b, #9c6e45);
-  box-shadow: 0 9px 18px rgba(77, 100, 118, 0.14);
+  border-radius: 999px 999px 8px 8px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18), transparent 18% 72%, rgba(83, 53, 30, 0.16)),
+    linear-gradient(180deg, #cda779, #95683f);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.22),
+    0 10px 18px rgba(77, 100, 118, 0.15);
 }
 
 .bookmark {
@@ -144,45 +154,187 @@ button {
   z-index: 1;
   display: grid;
   place-items: center;
-  min-width: 88px;
-  height: 54px;
-  border: 2px solid rgba(80, 105, 116, 0.42);
+  min-width: 42px;
+  width: 46px;
+  height: var(--book-height, 64px);
+  border: 2px solid rgba(68, 76, 78, 0.34);
   border-bottom: 0;
-  border-radius: 10px 10px 3px 3px;
-  padding: 0 12px;
+  border-radius: 7px 7px 2px 2px;
+  padding: 16px 7px 10px;
   color: var(--ink);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.24) 0 8px, transparent 8px),
+    linear-gradient(180deg, var(--book-top), var(--book-bottom));
   box-shadow:
-    inset 7px 0 0 rgba(255, 255, 255, 0.22),
-    inset -1px 0 0 rgba(61, 77, 86, 0.14);
-  font-size: 0.78rem;
+    inset -5px 0 0 rgba(61, 77, 86, 0.12),
+    inset 0 8px 0 rgba(255, 255, 255, 0.16),
+    0 5px 9px rgba(70, 48, 31, 0.12);
+  font-size: 0.72rem;
   font-weight: 900;
+  line-height: 1;
   text-decoration: none;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
   transition: transform 160ms ease;
+}
+
+.shelf-trinket {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+}
+
+.snapdragon {
+  width: 42px;
+  height: 104px;
+  margin-inline: 4px;
+}
+
+.snapdragon::after {
+  content: "";
+  position: absolute;
+  left: 9px;
+  right: 9px;
+  bottom: 0;
+  height: 18px;
+  border: 2px solid rgba(68, 76, 78, 0.28);
+  border-radius: 5px 5px 8px 8px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.28), transparent 50%),
+    linear-gradient(180deg, #bddfec, #82b7c9);
+  box-shadow: 0 5px 9px rgba(70, 48, 31, 0.12);
+}
+
+.snapdragon-left {
+  transform: rotate(-4deg);
+  transform-origin: 50% 100%;
+  animation: snapdragonSwayLeft 4.8s ease-in-out infinite;
+}
+
+.snapdragon-right {
+  transform: rotate(4deg);
+  transform-origin: 50% 100%;
+  animation: snapdragonSwayRight 5.2s ease-in-out infinite;
+}
+
+.snap-stem {
+  position: absolute;
+  left: 50%;
+  bottom: 13px;
+  width: 5px;
+  height: 78px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #93c79b, #5f9b71);
+  transform: translateX(-50%);
+}
+
+.snap-stem::before,
+.snap-stem::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 8px;
+  border-radius: 999px 0 999px 0;
+  background: #8fc994;
+}
+
+.snap-stem::before {
+  left: -16px;
+  top: 38px;
+  transform: rotate(-28deg);
+}
+
+.snap-stem::after {
+  right: -16px;
+  top: 54px;
+  transform: rotate(28deg) scaleX(-1);
+}
+
+.snap-bloom {
+  position: absolute;
+  left: 50%;
+  width: 19px;
+  height: 16px;
+  border: 2px solid rgba(104, 92, 154, 0.28);
+  border-radius: 10px 10px 10px 4px;
+  background:
+    radial-gradient(circle at 68% 38%, rgba(255, 255, 255, 0.46) 0 3px, transparent 4px),
+    linear-gradient(180deg, #d8c8ff, #a992df);
+  box-shadow: 0 3px 5px rgba(70, 48, 31, 0.08);
+}
+
+.bloom-one {
+  top: 7px;
+  transform: translateX(-50%) rotate(-8deg);
+}
+
+.bloom-two {
+  top: 25px;
+  transform: translateX(-18%) rotate(12deg);
+}
+
+.bloom-three {
+  top: 42px;
+  transform: translateX(-78%) rotate(-16deg);
+}
+
+.bloom-four {
+  top: 60px;
+  transform: translateX(-22%) rotate(15deg);
+}
+
+.bookmark::before,
+.bookmark::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.56);
+}
+
+.bookmark::before {
+  top: 9px;
+}
+
+.bookmark::after {
+  bottom: 9px;
 }
 
 .bookmark:hover,
 .bookmark:focus-visible {
-  transform: translateY(-5px);
+  animation: bookWiggle 360ms ease both;
 }
 
 .bookmark-blue {
-  background: linear-gradient(180deg, #bddfec, #8fc2d3);
+  --book-height: 94px;
+  --book-top: #bddfec;
+  --book-bottom: #7fb7c9;
 }
 
 .bookmark-green {
-  background: linear-gradient(180deg, #c8e7cc, #93c79b);
+  --book-height: 82px;
+  --book-top: #c8e7cc;
+  --book-bottom: #86bd90;
 }
 
 .bookmark-yellow {
-  background: linear-gradient(180deg, #f7d978, #dfb654);
+  --book-height: 98px;
+  --book-top: #f7d978;
+  --book-bottom: #d8ad49;
 }
 
 .bookmark-pink {
-  background: linear-gradient(180deg, #f3c5d7, #d88aa8);
+  --book-height: 90px;
+  --book-top: #f3c5d7;
+  --book-bottom: #d47f9f;
 }
 
 .bookmark-mint {
-  background: linear-gradient(180deg, #e6f4df, #afd8b9);
+  --book-height: 86px;
+  --book-top: #e6f4df;
+  --book-bottom: #a5d1b0;
 }
 
 .panel {
@@ -1584,5 +1736,54 @@ dialog::backdrop {
   .index-card {
     inset: 30px 14px;
     padding-inline: 16px;
+  }
+}
+
+@keyframes bookWiggle {
+  0% {
+    transform: translateY(0) rotate(0);
+  }
+
+  38% {
+    transform: translateY(-7px) rotate(-3deg);
+  }
+
+  70% {
+    transform: translateY(-5px) rotate(2deg);
+  }
+
+  100% {
+    transform: translateY(-5px) rotate(0);
+  }
+}
+
+@keyframes snapdragonSwayLeft {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes snapdragonSwayRight {
+  0%,
+  100% {
+    transform: rotate(4deg);
+  }
+
+  50% {
+    transform: rotate(-2deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bookmark,
+  .snapdragon,
+  .search-row input {
+    animation: none;
+    transition: none;
   }
 }
