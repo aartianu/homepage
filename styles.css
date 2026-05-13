@@ -8,6 +8,25 @@
   --yellow: #f7d978;
   --mint: #e6f4df;
   --line: #9eb2b9;
+  --page-wash: linear-gradient(115deg, rgba(189, 223, 236, 0.7), rgba(255, 250, 240, 0.82) 42%, rgba(200, 231, 204, 0.74));
+  --page-glow: radial-gradient(circle at 14% 18%, rgba(247, 217, 120, 0.38), transparent 28%);
+  --panel-bg: rgba(255, 250, 240, 0.72);
+  --desk-bg: linear-gradient(145deg, rgba(255, 243, 201, 0.88), rgba(230, 244, 223, 0.72));
+  --calendar-bg: linear-gradient(180deg, rgba(189, 223, 236, 0.86), rgba(255, 250, 240, 0.76));
+  --arcade-bg: linear-gradient(150deg, rgba(230, 244, 223, 0.9), rgba(255, 243, 201, 0.76));
+  --claw-bg: linear-gradient(105deg, rgba(255, 255, 255, 0.42) 0 11%, transparent 11% 22%, rgba(255, 255, 255, 0.28) 22% 29%, transparent 29%), linear-gradient(#dff3f8 0 72%, #f7d978 72% 100%);
+  --fridge-bg: linear-gradient(165deg, #d7e8ed, #eef7ef);
+  --fridge-door-bg: rgba(236, 247, 250, 0.82);
+  --day-bg: linear-gradient(140deg, rgba(255, 243, 201, 0.86), rgba(189, 223, 236, 0.64));
+  --quote-bg: rgba(255, 250, 240, 0.7);
+  --quote-border: rgba(255, 250, 240, 0.82);
+  --weather-box-bg: rgba(255, 250, 240, 0.52);
+  --weather-view-bg: linear-gradient(rgba(255, 255, 255, 0.18), transparent 38%), linear-gradient(#bfe4f0, #eef7eb 72%, #c9e6bf);
+  --weather-frame-bg: rgba(255, 250, 240, 0.82);
+  --field-bg: rgba(255, 255, 255, 0.76);
+  --tile-bg: rgba(255, 255, 255, 0.64);
+  --tile-outside-bg: rgba(255, 255, 255, 0.34);
+  --focus-ring: #6fae9b;
   --shadow: 0 18px 46px rgba(77, 100, 118, 0.16);
   font-family: "Avenir Next", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -20,9 +39,7 @@ body {
   min-height: 100vh;
   margin: 0;
   color: var(--ink);
-  background:
-    linear-gradient(115deg, rgba(189, 223, 236, 0.7), rgba(255, 250, 240, 0.82) 42%, rgba(200, 231, 204, 0.74)),
-    radial-gradient(circle at 14% 18%, rgba(247, 217, 120, 0.38), transparent 28%);
+  background: var(--page-glow), var(--page-wash);
 }
 
 button,
@@ -49,7 +66,7 @@ button {
 .search-label {
   margin: 0 0 6px;
   text-align: center;
-  color: #111111;
+  color: var(--ink);
   font-size: 1.02rem;
   font-weight: 700;
 }
@@ -68,13 +85,13 @@ button {
   border-radius: 999px;
   padding: 0 18px;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.76);
+  background: var(--field-bg);
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.74);
   outline: 0;
 }
 
 .search-row input:focus {
-  border-color: #6fae9b;
+  border-color: var(--focus-ring);
 }
 
 .search-row button,
@@ -97,12 +114,83 @@ button {
   align-items: stretch;
 }
 
+.bookmark-shelf {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: min(760px, 100%);
+  margin: -4px auto 22px;
+  padding: 0 18px 15px;
+}
+
+.bookmark-shelf::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 13px;
+  border: 2px solid rgba(104, 76, 47, 0.38);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #c39a6b, #9c6e45);
+  box-shadow: 0 9px 18px rgba(77, 100, 118, 0.14);
+}
+
+.bookmark {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-width: 88px;
+  height: 54px;
+  border: 2px solid rgba(80, 105, 116, 0.42);
+  border-bottom: 0;
+  border-radius: 10px 10px 3px 3px;
+  padding: 0 12px;
+  color: var(--ink);
+  box-shadow:
+    inset 7px 0 0 rgba(255, 255, 255, 0.22),
+    inset -1px 0 0 rgba(61, 77, 86, 0.14);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-decoration: none;
+  transition: transform 160ms ease;
+}
+
+.bookmark:hover,
+.bookmark:focus-visible {
+  transform: translateY(-5px);
+}
+
+.bookmark-blue {
+  background: linear-gradient(180deg, #bddfec, #8fc2d3);
+}
+
+.bookmark-green {
+  background: linear-gradient(180deg, #c8e7cc, #93c79b);
+}
+
+.bookmark-yellow {
+  background: linear-gradient(180deg, #f7d978, #dfb654);
+}
+
+.bookmark-pink {
+  background: linear-gradient(180deg, #f3c5d7, #d88aa8);
+}
+
+.bookmark-mint {
+  background: linear-gradient(180deg, #e6f4df, #afd8b9);
+}
+
 .panel {
   position: relative;
   overflow: hidden;
   border: 2px solid rgba(80, 105, 116, 0.62);
   border-radius: 26px;
-  background: rgba(255, 250, 240, 0.72);
+  background: var(--panel-bg);
   box-shadow: var(--shadow);
 }
 
@@ -144,7 +232,7 @@ button {
 }
 
 .desk-panel .panel-title p {
-  color: #111111;
+  color: var(--ink);
   font-family: "Snell Roundhand", "Brush Script MT", "Segoe Script", cursive;
   font-size: clamp(1.35rem, 2.8vw, 1.95rem);
   font-weight: 500;
@@ -176,7 +264,7 @@ h2 {
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-height: 390px;
-  background: linear-gradient(145deg, rgba(255, 243, 201, 0.88), rgba(230, 244, 223, 0.72));
+  background: var(--desk-bg);
   transition: min-height 520ms ease;
 }
 
@@ -553,7 +641,8 @@ h2 {
   border: 2px solid #c9d4c3;
   border-radius: 12px;
   padding: 0 12px;
-  background: white;
+  color: var(--ink);
+  background: var(--field-bg);
   outline: 0;
 }
 
@@ -600,7 +689,7 @@ h2 {
 .calendar-panel {
   min-height: 390px;
   padding: 22px;
-  background: linear-gradient(180deg, rgba(189, 223, 236, 0.86), rgba(255, 250, 240, 0.76));
+  background: var(--calendar-bg);
 }
 
 .calendar-header {
@@ -648,13 +737,13 @@ h2 {
   border: 2px solid rgba(94, 126, 138, 0.44);
   border-radius: 13px;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.64);
+  background: var(--tile-bg);
   font-weight: 850;
 }
 
 .day.outside {
   color: #8fa0a8;
-  background: rgba(255, 255, 255, 0.34);
+  background: var(--tile-outside-bg);
 }
 
 .day.today {
@@ -687,7 +776,7 @@ h2 {
   padding: 18px 22px;
   border: 2px solid rgba(94, 126, 138, 0.34);
   border-radius: 18px;
-  background: rgba(255, 250, 240, 0.52);
+  background: var(--weather-box-bg);
 }
 
 .calendar-panel.show-weather .weather-window {
@@ -699,9 +788,7 @@ h2 {
   height: 150px;
   border: 3px solid rgba(105, 132, 140, 0.42);
   border-radius: 18px;
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.18), transparent 38%),
-    linear-gradient(#bfe4f0, #eef7eb 72%, #c9e6bf);
+  background: var(--weather-view-bg);
   overflow: hidden;
   box-shadow: inset 0 0 0 4px rgba(255, 250, 240, 0.62);
 }
@@ -709,7 +796,7 @@ h2 {
 .window-frame {
   position: absolute;
   z-index: 4;
-  background: rgba(255, 250, 240, 0.82);
+  background: var(--weather-frame-bg);
   box-shadow: 0 0 0 1px rgba(105, 132, 140, 0.18);
 }
 
@@ -835,7 +922,7 @@ h2 {
 
 .arcade-panel {
   min-height: 370px;
-  background: linear-gradient(150deg, rgba(230, 244, 223, 0.9), rgba(255, 243, 201, 0.76));
+  background: var(--arcade-bg);
 }
 
 .claw-machine {
@@ -846,9 +933,7 @@ h2 {
   margin: 16px 24px 24px;
   border: 3px solid #79a8b7;
   border-radius: 24px;
-  background:
-    linear-gradient(105deg, rgba(255, 255, 255, 0.42) 0 11%, transparent 11% 22%, rgba(255, 255, 255, 0.28) 22% 29%, transparent 29%),
-    linear-gradient(#dff3f8 0 72%, #f7d978 72% 100%);
+  background: var(--claw-bg);
   overflow: hidden;
 }
 
@@ -1139,7 +1224,7 @@ h2 {
 .fridge-panel {
   min-height: 330px;
   padding: 28px;
-  background: linear-gradient(165deg, #d7e8ed, #eef7ef);
+  background: var(--fridge-bg);
 }
 
 .fridge-door {
@@ -1149,7 +1234,7 @@ h2 {
   min-height: 274px;
   border: 2px solid rgba(100, 129, 139, 0.44);
   border-radius: 22px;
-  background: rgba(236, 247, 250, 0.82);
+  background: var(--fridge-door-bg);
 }
 
 .index-card {
@@ -1257,7 +1342,7 @@ h2 {
   grid-column: 1 / -1;
   min-height: 260px;
   padding: 22px;
-  background: linear-gradient(140deg, rgba(255, 243, 201, 0.86), rgba(189, 223, 236, 0.64));
+  background: var(--day-bg);
 }
 
 .daily-half {
@@ -1300,9 +1385,9 @@ h2 {
   margin: 0;
   border-radius: 16px;
   padding: 20px 22px;
-  color: #263143;
-  background: rgba(255, 250, 240, 0.7);
-  border: 4px solid rgba(255, 250, 240, 0.82);
+  color: var(--ink);
+  background: var(--quote-bg);
+  border: 4px solid var(--quote-border);
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(1.16rem, 1.85vw, 1.48rem);
   font-style: italic;
@@ -1369,12 +1454,18 @@ dialog::backdrop {
 
 .event-list li {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   gap: 10px;
   align-items: center;
   border-radius: 12px;
   padding: 8px 10px;
   background: rgba(189, 223, 236, 0.45);
+}
+
+.event-list span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .event-list button {

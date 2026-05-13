@@ -37,6 +37,7 @@ const eventDateLabel = document.querySelector("#eventDateLabel");
 const eventList = document.querySelector("#eventList");
 const eventInput = document.querySelector("#eventInput");
 const cancelEvent = document.querySelector("#cancelEvent");
+const eventSubmitButton = eventForm.querySelector('button[type="submit"]');
 const addTodoButton = document.querySelector("#addTodoButton");
 const todoCompose = document.querySelector("#todoCompose");
 const todoInput = document.querySelector("#todoInput");
@@ -50,6 +51,7 @@ const quoteSource = document.querySelector("#quoteSource");
 const today = new Date();
 let visibleMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 let selectedEventDate = "";
+let editingEventIndex = -1;
 let weatherLoaded = false;
 let activeFolderId = "";
 let activeDocumentId = "";
@@ -364,6 +366,12 @@ function addRemoveButton(label, onClick) {
   return button;
 }
 
+function resetEventEditor() {
+  editingEventIndex = -1;
+  eventInput.value = "";
+  eventSubmitButton.textContent = "Save";
+}
+
 function renderCalendar() {
   const events = readEvents();
   monthLabel.textContent = new Intl.DateTimeFormat(undefined, {
@@ -396,7 +404,7 @@ function renderCalendar() {
     button.addEventListener("click", () => {
       selectedEventDate = key;
       eventDateLabel.textContent = formatLongDate(date);
-      eventInput.value = "";
+      resetEventEditor();
       renderEventList();
       eventDialog.showModal();
       eventInput.focus();
@@ -422,11 +430,25 @@ function renderEventList() {
     const item = document.createElement("li");
     const text = document.createElement("span");
     text.textContent = eventName;
-    item.append(text, addRemoveButton(`Delete ${eventName}`, () => {
+
+    const editButton = document.createElement("button");
+    editButton.type = "button";
+    editButton.textContent = "edit";
+    editButton.ariaLabel = `Edit ${eventName}`;
+    editButton.addEventListener("click", () => {
+      editingEventIndex = index;
+      eventInput.value = eventName;
+      eventSubmitButton.textContent = "Update";
+      eventInput.focus();
+      eventInput.select();
+    });
+
+    item.append(text, editButton, addRemoveButton(`Delete ${eventName}`, () => {
       const nextEvents = readEvents();
       nextEvents[selectedEventDate] = (nextEvents[selectedEventDate] || []).filter((_, eventIndex) => eventIndex !== index);
       if (!nextEvents[selectedEventDate].length) delete nextEvents[selectedEventDate];
       writeEvents(nextEvents);
+      resetEventEditor();
       renderEventList();
       renderCalendar();
     }));
@@ -646,6 +668,7 @@ nextMonth.addEventListener("click", () => {
 });
 
 cancelEvent.addEventListener("click", () => {
+  resetEventEditor();
   eventDialog.close();
 });
 
@@ -654,8 +677,12 @@ eventForm.addEventListener("submit", (event) => {
   const events = readEvents();
   const value = eventInput.value.trim();
   if (value) {
-    events[selectedEventDate] = [...(events[selectedEventDate] || []), value];
-    eventInput.value = "";
+    if (editingEventIndex >= 0 && events[selectedEventDate]?.[editingEventIndex]) {
+      events[selectedEventDate][editingEventIndex] = value;
+    } else {
+      events[selectedEventDate] = [...(events[selectedEventDate] || []), value];
+    }
+    resetEventEditor();
   }
   writeEvents(events);
   renderEventList();
@@ -677,3 +704,4 @@ renderCalendar();
 renderTodos();
 renderSong();
 renderQuote();
+searchInput.focus();
