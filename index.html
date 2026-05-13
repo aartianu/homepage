@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aarti's Desk</title>
+    <link rel="stylesheet" href="styles.css?v=20260512-labeled-tabs">
+  </head>
+  <body>
+    <main class="page">
+      <header class="search-header">
+        <div class="search-label">the sky's the limit!</div>
+        <form class="search-row" id="searchForm" autocomplete="off">
+          <label class="visually-hidden" for="searchInput">Search or enter website name</label>
+          <input id="searchInput" type="text" inputmode="search" placeholder="Search or enter website name">
+          <button type="submit">Go</button>
+        </form>
+      </header>
+
+      <section class="dashboard" aria-label="Homepage dashboard">
+        <article class="panel desk-panel">
+          <div class="panel-title">
+            <p>the desk of</p>
+            <h1>Aarti Anugonda</h1>
+          </div>
+
+          <div class="briefcase-scene" id="briefcaseScene">
+            <div class="briefcase" aria-hidden="true">
+              <div class="case-handle"></div>
+              <div class="case-lid"></div>
+              <div class="case-body">
+                <span class="case-latch"></span>
+              </div>
+            </div>
+
+            <div class="briefcase-notes" id="briefcaseNotes" aria-live="polite">
+              <section class="file-view is-active" id="folderView" aria-label="Folders">
+                <div class="file-toolbar">
+                  <span>folders</span>
+                  <button id="addFolderButton" type="button">new folder</button>
+                </div>
+                <div class="folder-grid" id="folderGrid"></div>
+              </section>
+
+              <section class="file-view" id="documentMenuView" aria-label="Documents">
+                <div class="file-toolbar">
+                  <button id="backToFolders" type="button">back</button>
+                  <span id="documentMenuTitle">documents</span>
+                  <button id="addDocumentButton" type="button">new document</button>
+                </div>
+                <div class="document-menu" id="documentMenu"></div>
+              </section>
+
+              <section class="file-view" id="documentView" aria-label="Document">
+                <div class="file-toolbar">
+                  <button id="backToDocuments" type="button">back</button>
+                  <span id="activeDocumentTitle">document</span>
+                </div>
+                <label class="visually-hidden" for="deskDocument">Desk document</label>
+                <textarea id="deskDocument" placeholder="Start writing..."></textarea>
+              </section>
+            </div>
+          </div>
+
+          <div class="case-actions">
+            <button id="briefcaseToggle" type="button">open briefcase</button>
+          </div>
+        </article>
+
+        <article class="panel calendar-panel">
+          <div class="calendar-header">
+            <button class="icon-button" id="prevMonth" type="button" aria-label="Previous month">‹</button>
+            <h2 id="monthLabel"></h2>
+            <button class="icon-button" id="nextMonth" type="button" aria-label="Next month">›</button>
+          </div>
+          <div class="calendar-weekdays" aria-hidden="true">
+            <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+          </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+          <div class="weather-window" aria-live="polite">
+            <div class="weather-view" aria-hidden="true">
+              <span class="window-frame window-vertical"></span>
+              <span class="window-frame window-horizontal"></span>
+              <span class="weather-sun"></span>
+              <span class="weather-cloud"></span>
+              <span class="weather-hill weather-hill-left"></span>
+              <span class="weather-hill weather-hill-right"></span>
+            </div>
+            <div>
+              <p id="weatherPlace">weather window</p>
+              <strong id="weatherTemp">--</strong>
+              <span id="weatherSummary">Checking the sky</span>
+              <button id="weatherLocation" type="button">use current location</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel arcade-panel">
+          <div class="panel-title">
+            <p>arcade</p>
+            <h2>daily games</h2>
+          </div>
+          <div class="claw-machine">
+            <div class="claw-track" aria-hidden="true"></div>
+            <div class="claw-assembly" aria-hidden="true">
+              <span class="claw-trolley"></span>
+              <span class="claw-cord"></span>
+              <span class="claw">
+                <span class="claw-hub"></span>
+                <span class="claw-arm claw-left"></span>
+                <span class="claw-arm claw-right"></span>
+              </span>
+            </div>
+            <div class="plush-row" aria-label="Daily game links">
+              <a class="plush plush-yellow" href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noreferrer" aria-label="Open Wordle">
+                <span class="plush-toy" aria-hidden="true">
+                  <span class="toy-ear toy-ear-left"></span>
+                  <span class="toy-ear toy-ear-right"></span>
+                  <span class="toy-head">
+                    <span class="toy-eye toy-eye-left"></span>
+                    <span class="toy-eye toy-eye-right"></span>
+                    <span class="toy-snout"></span>
+                  </span>
+                  <span class="toy-body"></span>
+                  <span class="toy-paw toy-paw-left"></span>
+                  <span class="toy-paw toy-paw-right"></span>
+                </span>
+                <strong>Wordle</strong>
+              </a>
+              <a class="plush plush-blue" href="https://globle-game.com" target="_blank" rel="noreferrer" aria-label="Open Globle">
+                <span class="plush-toy" aria-hidden="true">
+                  <span class="toy-ear toy-ear-left"></span>
+                  <span class="toy-ear toy-ear-right"></span>
+                  <span class="toy-head">
+                    <span class="toy-eye toy-eye-left"></span>
+                    <span class="toy-eye toy-eye-right"></span>
+                    <span class="toy-snout"></span>
+                  </span>
+                  <span class="toy-body"></span>
+                  <span class="toy-paw toy-paw-left"></span>
+                  <span class="toy-paw toy-paw-right"></span>
+                </span>
+                <strong>Globle</strong>
+              </a>
+              <a class="plush plush-green" href="https://www.nytimes.com/games/pips" target="_blank" rel="noreferrer" aria-label="Open Pips">
+                <span class="plush-toy" aria-hidden="true">
+                  <span class="toy-ear toy-ear-left"></span>
+                  <span class="toy-ear toy-ear-right"></span>
+                  <span class="toy-head">
+                    <span class="toy-eye toy-eye-left"></span>
+                    <span class="toy-eye toy-eye-right"></span>
+                    <span class="toy-snout"></span>
+                  </span>
+                  <span class="toy-body"></span>
+                  <span class="toy-paw toy-paw-left"></span>
+                  <span class="toy-paw toy-paw-right"></span>
+                </span>
+                <strong>Pips</strong>
+              </a>
+              <a class="plush plush-pink" href="https://www.nytimes.com/games/connections" target="_blank" rel="noreferrer" aria-label="Open Connections">
+                <span class="plush-toy" aria-hidden="true">
+                  <span class="toy-ear toy-ear-left"></span>
+                  <span class="toy-ear toy-ear-right"></span>
+                  <span class="toy-head">
+                    <span class="toy-eye toy-eye-left"></span>
+                    <span class="toy-eye toy-eye-right"></span>
+                    <span class="toy-snout"></span>
+                  </span>
+                  <span class="toy-body"></span>
+                  <span class="toy-paw toy-paw-left"></span>
+                  <span class="toy-paw toy-paw-right"></span>
+                </span>
+                <strong>Connections</strong>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel fridge-panel">
+          <div class="fridge-door">
+            <div class="index-card">
+              <span class="tape tape-left"></span>
+              <span class="tape tape-right"></span>
+              <div class="card-heading">
+                <p>to do...</p>
+                <button id="addTodoButton" type="button" aria-label="Add to-do">+</button>
+              </div>
+              <div class="todo-compose" id="todoCompose">
+                <input id="todoInput" type="text" maxlength="70" placeholder="New task">
+              </div>
+              <ul id="todoList"></ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel day-panel">
+          <div class="daily-half song-half">
+            <div class="panel-title">
+              <p>song of the day</p>
+              <h2 id="songTitle"></h2>
+            </div>
+            <iframe id="spotifyPlayer" title="Spotify song of the day" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+          </div>
+          <div class="daily-half quote-half">
+            <div class="panel-title">
+              <p>quote of the day</p>
+              <h2 id="quoteAuthor"></h2>
+            </div>
+            <blockquote>
+              <p id="quoteText"></p>
+              <cite id="quoteSource"></cite>
+            </blockquote>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <dialog id="eventDialog">
+      <form class="dialog-card" id="eventForm">
+        <div>
+          <p>calendar</p>
+          <h2 id="eventDateLabel"></h2>
+        </div>
+        <ul class="event-list" id="eventList"></ul>
+        <label>
+          Add Event
+          <input id="eventInput" type="text" maxlength="80">
+        </label>
+        <div class="dialog-actions">
+          <button class="secondary-button" id="cancelEvent" type="button">Cancel</button>
+          <button type="submit">Save</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
