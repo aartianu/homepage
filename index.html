@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Aarti's Desk</title>
-    <link rel="stylesheet" href="styles.css?v=20260512-bookmarks">
+    <link rel="stylesheet" href="styles.css?v=20260513-no-book-hover">
   </head>
   <body>
     <main class="page">
@@ -25,11 +25,11 @@
           <span class="snap-bloom bloom-three"></span>
           <span class="snap-bloom bloom-four"></span>
         </span>
-        <a class="bookmark bookmark-blue" href="https://www.reddit.com" target="_blank" rel="noreferrer">Reddit</a>
-        <a class="bookmark bookmark-green" href="https://drive.google.com" target="_blank" rel="noreferrer">Drive</a>
-        <a class="bookmark bookmark-yellow" href="https://mail.google.com" target="_blank" rel="noreferrer">Gmail</a>
-        <a class="bookmark bookmark-pink" href="https://canvas.unc.edu" target="_blank" rel="noreferrer">Canvas</a>
-        <a class="bookmark bookmark-mint" href="https://archiveofourown.org" target="_blank" rel="noreferrer">AO3</a>
+        <span class="bookmark bookmark-blue" data-bookmark-url="https://www.reddit.com" role="link" tabindex="0">Reddit</span>
+        <span class="bookmark bookmark-green" data-bookmark-url="https://drive.google.com" role="link" tabindex="0">Drive</span>
+        <span class="bookmark bookmark-yellow" data-bookmark-url="https://mail.google.com" role="link" tabindex="0">Gmail</span>
+        <span class="bookmark bookmark-pink" data-bookmark-url="https://canvas.unc.edu" role="link" tabindex="0">Canvas</span>
+        <span class="bookmark bookmark-mint" data-bookmark-url="https://archiveofourown.org" role="link" tabindex="0">AO3</span>
         <span class="shelf-trinket snapdragon snapdragon-right" aria-hidden="true">
           <span class="snap-stem"></span>
           <span class="snap-bloom bloom-one"></span>
@@ -77,9 +77,18 @@
                 <div class="file-toolbar">
                   <button id="backToDocuments" type="button">back</button>
                   <span id="activeDocumentTitle">document</span>
+                  <button id="googleDocButton" type="button">google doc</button>
+                  <button id="annotateFileButton" type="button">annotate</button>
+                  <button id="openGoogleDocButton" type="button">open</button>
                 </div>
                 <label class="visually-hidden" for="deskDocument">Desk document</label>
                 <textarea id="deskDocument" placeholder="Start writing..."></textarea>
+                <div class="google-doc-preview" id="googleDocPreview">
+                  <iframe id="googleDocFrame" title="Google Doc preview"></iframe>
+                </div>
+                <div class="uploaded-file-preview" id="uploadedFilePreview">
+                  <iframe id="uploadedFileFrame" title="Uploaded file preview"></iframe>
+                </div>
               </section>
             </div>
           </div>
@@ -255,6 +264,47 @@
       </form>
     </dialog>
 
+    <dialog id="documentTypeDialog">
+      <div class="dialog-card document-type-card">
+        <div>
+          <p>new document</p>
+          <h2>Choose a type</h2>
+        </div>
+        <div class="document-type-options" aria-label="Document type">
+          <button type="button" data-document-type="normal">normal</button>
+          <button type="button" data-document-type="google">google doc</button>
+          <button type="button" data-document-type="file">file</button>
+        </div>
+        <div class="dialog-actions">
+          <button class="secondary-button" id="cancelDocumentType" type="button">Cancel</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="annotationDialog">
+      <div class="annotation-studio">
+        <div class="annotation-toolbar">
+          <strong id="annotationTitle">annotate</strong>
+          <div class="annotation-tools" aria-label="Annotation tools">
+            <button class="is-active" type="button" data-annotation-tool="scroll">scroll</button>
+            <button type="button" data-annotation-tool="note">sticky</button>
+            <button type="button" data-annotation-tool="highlight">highlight</button>
+            <button type="button" data-annotation-tool="link">link</button>
+            <button type="button" data-annotation-tool="image">image</button>
+          </div>
+          <button id="closeAnnotationButton" type="button">done</button>
+        </div>
+        <div class="annotation-canvas" id="annotationCanvas">
+          <div class="annotation-page" id="annotationPage">
+            <iframe id="annotationFrame" title="File annotation preview"></iframe>
+            <div class="annotation-layer" id="annotationLayer" aria-label="Annotation layer"></div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <input class="visually-hidden" id="documentFileInput" type="file" accept=".pdf,.txt,.html,.htm,.md,image/*">
+    <input class="visually-hidden" id="annotationImageInput" type="file" accept="image/*">
     <script src="app.js"></script>
   </body>
 </html>
