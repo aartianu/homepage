@@ -1,6 +1,34 @@
 const { createClient } = require("@libsql/client");
 
-const stateId = "default";
+const rowId = "default";
+
+const stores = [
+  {
+    key: "aarti.homepage.document",
+    table: "homepage_legacy_document",
+    fallback: ""
+  },
+  {
+    key: "aarti.homepage.folders",
+    table: "homepage_folders",
+    fallback: "[]"
+  },
+  {
+    key: "aarti.homepage.todos",
+    table: "homepage_todos",
+    fallback: "[]"
+  },
+  {
+    key: "aarti.homepage.events",
+    table: "homepage_events",
+    fallback: "{}"
+  },
+  {
+    key: "aarti.homepage.song",
+    table: "homepage_song",
+    fallback: ""
+  }
+];
 
 function getClient() {
   const url = process.env.TURSO_DATABASE_URL;
@@ -21,13 +49,59 @@ async function readBody(req) {
 }
 
 async function ensureSchema(client) {
-  await client.execute(`
-    CREATE TABLE IF NOT EXISTS homepage_state (
+  await Promise.all(stores.map((store) => client.execute(`
+    CREATE TABLE IF NOT EXISTS ${store.table} (
       id TEXT PRIMARY KEY,
       data TEXT NOT NULL,
       updated_at TEXT NOT NULL
     )
-  `);
+  `)));
+}
+
+async function readState(client) {
+  const state = {};
+  const rows = await Promise.all(stores.map(async (store) => {
+    const result = await client.execute({
+      sql: `SELECT data FROM ${store.table} WHERE id = ?`,
+      args: [rowId]
+    });
+    return [store.key, result.rows[0]?.data ?? null];
+  }));
+
+  rows.forEach(([key, value]) => {
+    if (value !== null) state[key] = value;
+  });
+
+  return state;
+}
+
+async function readLegacyBlobState(client) {
+  try {
+    const result = await client.execute({
+      sql: "SELECT data FROM homepage_state WHERE id = ?",
+      args: [rowId]
+    });
+    const raw = result.rows[0]?.data;
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+async function writeState(client, state) {
+  const updatedAt = new Date().toISOString();
+  await Promise.all(stores.map((store) => {
+    const value = typeof state[store.key] === "string" ? state[store.key] : store.fallback;
+    return client.execute({
+      sql: `
+        INSERT INTO ${store.table} (id, data, updated_at)
+        VALUES (?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at
+      `,
+      args: [rowId, value, updatedAt]
+    });
+  }));
+  return updatedAt;
 }
 
 module.exports = async function handler(req, res) {
@@ -36,36 +110,23 @@ module.exports = async function handler(req, res) {
     await ensureSchema(client);
 
     if (req.method === "GET") {
-      const result = await client.execute({
-        sql: "SELECT data, updated_at FROM homepage_state WHERE id = ?",
-        args: [stateId]
-      });
-      const row = result.rows[0];
+      let data = await readState(client);
+      if (!Object.keys(data).length) {
+        const legacyData = await readLegacyBlobState(client);
+        if (legacyData && typeof legacyData === "object") {
+          await writeState(client, legacyData);
+          data = await readState(client);
+        }
+      }
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify(row ? { data: JSON.parse(row.data), updatedAt: row.updated_at } : { data: null }));
+      res.end(JSON.stringify({ data }));
       return;
     }
 
     if (req.method === "POST") {
-      const writeSecret = process.env.HOMEPAGE_WRITE_SECRET;
-      if (writeSecret && req.headers["x-homepage-secret"] !== writeSecret) {
-        res.statusCode = 401;
-        res.end(JSON.stringify({ error: "Missing or invalid sync secret." }));
-        return;
-      }
-
       const body = await readBody(req);
-      const updatedAt = new Date().toISOString();
-      await client.execute({
-        sql: `
-          INSERT INTO homepage_state (id, data, updated_at)
-          VALUES (?, ?, ?)
-          ON CONFLICT(id) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at
-        `,
-        args: [stateId, JSON.stringify(body.data || {}), updatedAt]
-      });
-
+      const updatedAt = await writeState(client, body.data || {});
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
       res.end(JSON.stringify({ ok: true, updatedAt }));
