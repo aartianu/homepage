@@ -6,6 +6,10 @@ const storage = {
   song: "aarti.homepage.song"
 };
 
+const cloudStateKeys = Object.values(storage);
+let suppressCloudSave = false;
+let cloudSaveTimer = 0;
+
 const searchForm = document.querySelector("#searchForm");
 const searchInput = document.querySelector("#searchInput");
 const bookmarkShelf = document.querySelector(".bookmark-shelf");
@@ -187,8 +191,62 @@ function readList(key, fallback = []) {
   }
 }
 
+function collectCloudState() {
+  return Object.fromEntries(cloudStateKeys.map((key) => [key, localStorage.getItem(key)]));
+}
+
+function applyCloudState(data) {
+  if (!data || typeof data !== "object") return;
+  suppressCloudSave = true;
+  cloudStateKeys.forEach((key) => {
+    if (typeof data[key] === "string") {
+      localStorage.setItem(key, data[key]);
+    } else if (data[key] === null) {
+      localStorage.removeItem(key);
+    }
+  });
+  suppressCloudSave = false;
+}
+
+function getCloudSyncSecret() {
+  return localStorage.getItem("aarti.homepage.syncSecret") || "";
+}
+
+function scheduleCloudSave() {
+  if (suppressCloudSave) return;
+  window.clearTimeout(cloudSaveTimer);
+  cloudSaveTimer = window.setTimeout(saveCloudState, 650);
+}
+
+async function loadCloudState() {
+  try {
+    const response = await fetch("/api/state");
+    if (!response.ok) return;
+    const payload = await response.json();
+    applyCloudState(payload.data);
+  } catch {
+    // Local file/http-server previews do not have the Vercel API route.
+  }
+}
+
+async function saveCloudState() {
+  try {
+    const secret = getCloudSyncSecret();
+    const headers = { "Content-Type": "application/json" };
+    if (secret) headers["x-homepage-secret"] = secret;
+    await fetch("/api/state", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ data: collectCloudState() })
+    });
+  } catch {
+    // Keep localStorage as the offline-first source if cloud sync is unavailable.
+  }
+}
+
 function writeList(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+  scheduleCloudSave();
 }
 
 function createId(prefix) {
@@ -399,6 +457,7 @@ function readEvents() {
 
 function writeEvents(events) {
   localStorage.setItem(storage.events, JSON.stringify(events));
+  scheduleCloudSave();
 }
 
 function normalizeUrl(value) {
@@ -943,6 +1002,7 @@ function pickSong() {
 
   const index = songOverrides[todayKey] ?? Math.floor(Math.random() * songs.length);
   localStorage.setItem(storage.song, JSON.stringify({ date: todayKey, index, version: songRotationVersion }));
+  scheduleCloudSave();
   return songs[index];
 }
 
@@ -1271,8 +1331,13 @@ todoInput.addEventListener("keydown", (event) => {
 
 weatherLocation.addEventListener("click", loadLocalWeather);
 
-renderCalendar();
-renderTodos();
-renderSong();
-renderQuote();
-searchInput.focus();
+async function initApp() {
+  await loadCloudState();
+  renderCalendar();
+  renderTodos();
+  renderSong();
+  renderQuote();
+  searchInput.focus();
+}
+
+initApp();

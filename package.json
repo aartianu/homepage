@@ -1,0 +1,14 @@
+{
+  "name": "my-homepage",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "python3 -m http.server 8000"
+  },
+  "dependencies": {
+    "@libsql/client": "latest"
+  },
+  "devDependencies": {
+    "vercel": "latest"
+  }
+}
