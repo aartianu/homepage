@@ -12,7 +12,6 @@ let cloudSaveTimer = 0;
 
 const searchForm = document.querySelector("#searchForm");
 const searchInput = document.querySelector("#searchInput");
-const bookmarkShelf = document.querySelector(".bookmark-shelf");
 const deskPanel = document.querySelector(".desk-panel");
 const briefcaseToggle = document.querySelector("#briefcaseToggle");
 const deskDocument = document.querySelector("#deskDocument");
@@ -132,9 +131,10 @@ const songs = [
   }
 ];
 
-const songRotationVersion = "2026-05-15";
+const songRotationVersion = "2026-05-17";
 const songOverrides = {
-  "2026-05-15": 6
+  "2026-05-15": 6,
+  "2026-05-17": 9
 };
 
 const quotes = [
@@ -1095,20 +1095,6 @@ searchForm.addEventListener("submit", (event) => {
   window.location.href = looksLikeUrl(query)
     ? normalizeUrl(query)
     : `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-});
-
-bookmarkShelf.addEventListener("click", (event) => {
-  const bookmark = event.target.closest("[data-bookmark-url]");
-  if (!bookmark) return;
-  window.open(bookmark.dataset.bookmarkUrl, "_blank", "noopener,noreferrer");
-});
-
-bookmarkShelf.addEventListener("keydown", (event) => {
-  if (event.key !== "Enter" && event.key !== " ") return;
-  const bookmark = event.target.closest("[data-bookmark-url]");
-  if (!bookmark) return;
-  event.preventDefault();
-  window.open(bookmark.dataset.bookmarkUrl, "_blank", "noopener,noreferrer");
 });
 
 briefcaseToggle.addEventListener("click", () => {
