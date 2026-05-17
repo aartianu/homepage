@@ -16,7 +16,7 @@ function getExpectedCredentials() {
   return password ? `${user}:${password}` : "";
 }
 
-export function middleware(request) {
+export default function middleware(request: Request) {
   const expected = getExpectedCredentials();
   if (!expected) return;
 
